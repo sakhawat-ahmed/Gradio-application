@@ -1,0 +1,10 @@
+gradio>=3.45
+transformers>=4.35
+torch>=2.1
+sentencepiece>=0.1.99
+
+
+Notes:
+sentencepiece is required by the NLLB model tokenizer.
+
+If you plan to use GPU, make sure to install torch with CUDA support, e.g., pip install torch==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html.

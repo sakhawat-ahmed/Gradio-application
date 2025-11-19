@@ -2,32 +2,50 @@ import gradio as gr
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # Load NLLB model
-model_name = "facebook/nllb-200-distilled-600M"
+model_name = "facebook/nllb-200-3.3B"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
 # Supported languages with NLLB language codes
 LANGUAGES = {
-    "English": "eng_Latn",
-    "Bengali": "ben_Beng",
-    "Chinese": "zho_Hans",
-    "Hindi": "hin_Deva",
-    "Urdu": "urd_Arab",
-    "Spanish": "spa_Latn",
-    "French": "fra_Latn",
-    "German": "deu_Latn",
-    "Italian": "ita_Latn",
-    "Portuguese": "por_Latn",
-    "Japanese": "jpn_Jpan",
-    "Korean": "kor_Hang",
-    "Russian": "rus_Cyrl",
-    "Arabic": "arb_Arab",
-    "Persian": "pes_Arab",
-    "Turkish": "tur_Latn",
-    "Vietnamese": "vie_Latn",
-    "Thai": "tha_Thai",
-    "Dutch": "nld_Latn",
-    "Swedish": "swe_Latn",
+    "Acehnese": "ace_Arab", "Afrikaans": "afr_Latn", "Akan": "aka_Latn", "Amharic": "amh_Ethi", "Armenian": "hye_Armn",
+    "Assamese": "asm_Beng", "Asturian": "ast_Latn", "Awadhi": "awa_Deva", "Ayacucho Quechua": "quy_Latn", "Balinese": "ban_Latn",
+    "Bambara": "bam_Latn", "Banjar": "bjn_Arab", "Bashkir": "bak_Cyrl", "Basque": "eus_Latn", "Belarusian": "bel_Cyrl",
+    "Bemba": "bem_Latn", "Bengali": "ben_Beng", "Bhojpuri": "bho_Deva", "Bosnian": "bos_Latn", "Buginese": "bug_Latn",
+    "Bulgarian": "bul_Cyrl", "Burmese": "mya_Mymr", "Catalan": "cat_Latn", "Cebuano": "ceb_Latn", "Central Atlas Tamazight": "tzm_Tfng",
+    "Central Aymara": "ayr_Latn", "Central Kanuri": "knc_Latn", "Central Kurdish": "ckb_Arab", "Chhattisgarhi": "hne_Deva", "Chinese": "zho_Hans",
+    "Chittagonian": "ctg_Beng", "Crimean Tatar": "crh_Latn", "Croatian": "hrv_Latn", "Czech": "ces_Latn", "Danish": "dan_Latn",
+    "Dari": "prs_Arab", "Dutch": "nld_Latn", "Dyula": "dyu_Latn", "Dzongkha": "dzo_Tibt", "Eastern Panjabi": "pan_Guru",
+    "Eastern Yiddish": "ydd_Hebr", "Egyptian Arabic": "arz_Arab", "English": "eng_Latn", "Esperanto": "epo_Latn", "Estonian": "est_Latn",
+    "Ewe": "ewe_Latn", "Faroese": "fao_Latn", "Fijian": "fij_Latn", "Finnish": "fin_Latn", "Fon": "fon_Latn",
+    "French": "fra_Latn", "Friulian": "fur_Latn", "Galician": "glg_Latn", "Ganda": "lug_Latn", "Georgian": "kat_Geor",
+    "German": "deu_Latn", "Greek": "ell_Grek", "Guarani": "grn_Latn", "Gujarati": "guj_Gujr", "Haitian Creole": "hat_Latn",
+    "Halh Mongolian": "khk_Cyrl", "Hausa": "hau_Latn", "Hebrew": "heb_Hebr", "Hindi": "hin_Deva", "Hmong Njua": "hnj_Latn",
+    "Hungarian": "hun_Latn", "Icelandic": "isl_Latn", "Igbo": "ibo_Latn", "Ilocano": "ilo_Latn", "Indonesian": "ind_Latn",
+    "Irish": "gle_Latn", "Italian": "ita_Latn", "Japanese": "jpn_Jpan", "Javanese": "jav_Latn", "Jingpho": "kac_Latn",
+    "Kamba": "kam_Latn", "Kannada": "kan_Knda", "Kashmiri": "kas_Arab", "Kazakh": "kaz_Cyrl", "Khmer": "khm_Khmr",
+    "Kikongo": "kon_Latn", "Kikuyu": "kik_Latn", "Kimbundu": "kmb_Latn", "Kinyarwanda": "kin_Latn", "Kirghiz": "kir_Cyrl",
+    "Kongo": "kon_Latn", "Korean": "kor_Hang", "Kurdish": "kur_Latn", "Lao": "lao_Laoo", "Latgalian": "ltg_Latn",
+    "Latin": "lat_Latn", "Latvian": "lav_Latn", "Ligurian": "lij_Latn", "Limburgish": "lim_Latn", "Lingala": "lin_Latn",
+    "Lithuanian": "lit_Latn", "Lombard": "lmo_Latn", "Luba-Kasai": "lua_Latn", "Luo": "luo_Latn", "Luxembourgish": "ltz_Latn",
+    "Macedonian": "mkd_Cyrl", "Magahi": "mag_Deva", "Maithili": "mai_Deva", "Malagasy": "plt_Latn", "Malay": "msa_Latn",
+    "Malayalam": "mal_Mlym", "Maltese": "mlt_Latn", "Manipuri": "mni_Beng", "Marathi": "mar_Deva", "Minangkabau": "min_Arab",
+    "Mizo": "lus_Latn", "Modern Greek": "ell_Grek", "Modern Standard Arabic": "arb_Arab", "Moroccan Arabic": "ary_Arab", "Mossi": "mos_Latn",
+    "Nepali": "npi_Deva", "Nigerian Fulfulde": "fuv_Latn", "North Azerbaijani": "azj_Latn", "North Levantine Arabic": "apc_Arab", "Northern Kurdish": "kmr_Latn",
+    "Northern Sotho": "nso_Latn", "Northern Uzbek": "uzn_Latn", "Norwegian": "nob_Latn", "Nyanja": "nya_Latn", "Occitan": "oci_Latn",
+    "Odia": "ory_Orya", "Pangasinan": "pag_Latn", "Papiamento": "pap_Latn", "Pashto": "pbt_Arab", "Persian": "pes_Arab",
+    "Polish": "pol_Latn", "Portuguese": "por_Latn", "Romanian": "ron_Latn", "Rundi": "run_Latn", "Russian": "rus_Cyrl",
+    "Saraiki": "skr_Arab", "Sardinian": "srd_Latn", "Scottish Gaelic": "gla_Latn", "Serbian": "srp_Cyrl", "Shan": "shn_Mymr",
+    "Shona": "sna_Latn", "Sicilian": "scn_Latn", "Silesian": "szl_Latn", "Sindhi": "snd_Arab", "Sinhala": "sin_Sinh",
+    "Slovak": "slk_Latn", "Slovenian": "slv_Latn", "Somali": "som_Latn", "South Azerbaijani": "azb_Arab", "Southern Pashto": "pbt_Arab",
+    "Southern Sotho": "sot_Latn", "Spanish": "spa_Latn", "Standard Latvian": "lvs_Latn", "Standard Malay": "zsm_Latn", "Sundanese": "sun_Latn",
+    "Swahili": "swh_Latn", "Swati": "ssw_Latn", "Swedish": "swe_Latn", "Tagalog": "tgl_Latn", "Tajik": "tgk_Cyrl",
+    "Tamasheq": "taq_Latn", "Tamil": "tam_Taml", "Tatar": "tat_Cyrl", "Telugu": "tel_Telu", "Thai": "tha_Thai",
+    "Tibetan": "bod_Tibt", "Tigrinya": "tir_Ethi", "Tok Pisin": "tpi_Latn", "Tosk Albanian": "als_Latn", "Tsonga": "tso_Latn",
+    "Tswana": "tsn_Latn", "Tumbuka": "tum_Latn", "Turkish": "tur_Latn", "Turkmen": "tuk_Latn", "Uighur": "uig_Arab",
+    "Ukrainian": "ukr_Cyrl", "Umbundu": "umb_Latn", "Urdu": "urd_Arab", "Venetian": "vec_Latn", "Vietnamese": "vie_Latn",
+    "Waray": "war_Latn", "Welsh": "cym_Latn", "West Central Oromo": "gaz_Latn", "Western Persian": "pes_Arab", "Wolof": "wol_Latn",
+    "Xhosa": "xho_Latn", "Yoruba": "yor_Latn", "Zulu": "zul_Latn"
 }
 
 def translate(text, src, tgt):
